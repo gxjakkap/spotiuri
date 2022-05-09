@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <title>SpotiURI</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/petite-vue/0.4.1/petite-vue.umd.min.js" integrity="sha512-52NSl2MB2XRqdW9Eigy5kaeYr/bqvX4cHV7X0m8O2a87g33/sjpmnjc2764lqARkS89hryIxUh5PWk0t0GvxSA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js" integrity="sha512-odNmoc1XJy5x1TMVMdC7EMs3IVdItLPlCeL5vSUPN2llYKMJ2eByTTAIiiuqLg+GdNr9hF6z81p27DArRFKT7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <style type="text/tailwindcss">
+        @font-face {
+            font-family: 'Circular';
+            src: url(./assets/CircularStd-Bold.otf) format('opentype');
+        }
+        * {
+            font-family: 'Circular';
+        }
+    </style>
+    <body class="bg-zinc-200">
+        <div class="flex justify-center pt-20">
+            <div class="items-center">
+              <!--<h1 class="w-full ml-auto text-center text-7xl mr-auto mb-3 drop-shadow-2xl">SpotiURI</h1>-->
+              <img class="ml-auto mr-auto mb-3 drop-shadow-2xl" width="400px" height="100" src="assets/title-min.png">
+              <div class="flex w-[650px] border drop-shadow-lg bg-slate-300 border-transparent border-4 rounded-full p-4 shadow text-xl mt-[50px]">
+                <input v-model="input" type="text" placeholder="Spotify Url" class="placeholder:italic placeholder:text-stone-900/50 w-full bg-slate-300 outline-none px-3">
+                <button @click="urltouri" class="mr-3 bg-gray-300 pointer-events-auto py-3 px-4 rounded-full w-auto hover:bg-gray-400 hover:border-gray-500">Convert</button>
+              </div> 
+              <div class="mr-auto mb-5">
+                <p v-if="showoutput" class="text-stone-900 text-4xl py-5 justify-center text-center">{{output}}</p>
+              </div>
+            </div>
+          </div>
+          <!-- footer -->
+          <div class="fixed bottom-0 bg-inherit w-full justify-center text-stone-900 text-xxs mb-2z ">
+            <div class="flex justify-center">
+              <a href="https://github.com/gxjakkap" target="_blank" class="block px-3">Made with ❤️ by GuntxJakka</a>
+            </div>
+          </div>
+    </body>
+    <script>
+        PetiteVue.createApp({
+            input: '',
+            output: '',
+            afterredir: '',
+            showoutput: false,
+            urltouri(){
+                if (this.input.includes('spoti.fi')){
+                    axios.get(this.input).then(x => {
+                        this.input = x.request._redirectable._currentUrl
+                    })
+                }
+                this.output = 'spotify:'.concat(this.input.substring(0, this.input.indexOf('?')).replace('https://open.spotify.com/', '').replace('/', ':'))
+                console.log(this.output)
+                this.showoutput = true
+            }
+        }).mount()
+      </script>
+</html>
